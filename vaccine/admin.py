@@ -1,6 +1,5 @@
 from django.contrib import admin
 from vaccine.models import All_Vaccines,B_V
-# Register your models here.
 
 class Vaccine_admin(admin.ModelAdmin):
 
@@ -17,11 +16,6 @@ class Vaccine_admin(admin.ModelAdmin):
      def static_duration(self,obj):
           return obj.vaccine.static_duration
 
-#      # readonly_fields = ['get_baby_name'] 
-
-#      # @admin.display(description='Parent')
-
-
      list_display=('baby_name',
                     'baby_birth',
                     'vaccine_name',
@@ -29,9 +23,6 @@ class Vaccine_admin(admin.ModelAdmin):
                     'static_duration',
                     'taken',
                     'dead_line',)
-
-# admin.site.register(Vaccine,Vaccineadmin)
-# admin.site.register(Vaccine)
 
 admin.site.register(B_V,Vaccine_admin)
 

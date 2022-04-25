@@ -19,9 +19,9 @@ from vaccine.models import B_V,All_Vaccines
 
 @api_view(['POST'])
 def registration_view(request):
-
-	# request =JSONParser().parse(request.data)
+	
 	if request.method == 'POST':
+
 
 		serializer = RegistrationSerializer(data=request.data)
 
@@ -42,7 +42,7 @@ def registration_view(request):
 def sign_in_view(request):
 
 	if request.method == 'POST':
-		# request_data =JSONParser().parse(request)
+
 		serializer = SignInSerializer(data=request.data)
 
 		print(serializer.is_valid())

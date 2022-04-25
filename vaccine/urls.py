@@ -5,6 +5,6 @@ from vaccine.views import *
 
 urlpatterns = [
 
-    path('vaccines', vaccines_view, name='vaccines')
+    path('vaccines/<int:id>', vaccines_view, name='vaccines')
 
 ]

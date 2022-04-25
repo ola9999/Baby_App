@@ -25,7 +25,7 @@ urlpatterns = [
 
     path('admin/', admin.site.urls),
     
-    # path('vaccine/', include('vaccine.urls')),
+    path('vaccine/', include('vaccine.urls')),
     path('', include('account.urls'))
     
 

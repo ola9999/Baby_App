@@ -3,10 +3,6 @@ from datetime import  timedelta,date
 from django.db.models.signals import pre_save, post_save
 
 
-
-
-
-# Create your models here.
 BABY_GENDER = (
     ('Male','Male'),
     ('Female','Female'),

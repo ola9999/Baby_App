@@ -27,16 +27,13 @@ class SignInSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Account
-        fields = ['email', 'password' ,]#, 'password2']#' __all__ '#
-
-
-
-
-
-
-#, 'password2']#' __all__ '#
-
-#	password2 				= serializers.CharField( max_length=60)
-#	password 				= serializers.CharField( max_length=60)
-
+        fields = ['email', 'password' ,]
 	
+class BabySerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Account
+        fields =[
+            'babyname',
+            'birth',
+            ]

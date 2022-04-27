@@ -13,6 +13,7 @@ from rest_framework.decorators import   api_view
 from django.core.exceptions import ObjectDoesNotExist
 
 from rest_framework import status  
+from rest_framework.response import Response
 
 from account.models import Account
 from vaccine.models import B_V,All_Vaccines
@@ -33,9 +34,13 @@ def registration_view(request):
 			data = serializer.errors
 			 
 			return JsonResponse(data, status=status.HTTP_400_BAD_REQUEST)
+
+		id = Account.objects.get(email=serializer.data.get('email')).id
+		data={'id':id}
+		data.update(serializer.data)
 		
 		# return JsonResponse({'response':'successfully registered new user.'})
-		return JsonResponse(serializer.data , status=200)
+		return Response(data , status=200)
 
 
 @api_view(['POST'])

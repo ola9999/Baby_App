@@ -23,3 +23,7 @@ class B_V(models.Model):
 
     taken               = models.BooleanField(default=False)
     dead_line			= models.DateField(default=None,null=True ,verbose_name="date to take", editable=False)
+
+    def save(self, *args, **kwargs):
+        self.dead_line = calc_date(self)
+        super(B_V, self).save(*args, **kwargs)

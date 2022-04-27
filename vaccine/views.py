@@ -17,22 +17,27 @@ def vaccines_view(request, id ):
         v_b = B_V.objects.all().filter(baby= b)
         
         data = {}
-        dic= {}
         lis = []
-
+        data ['baby']           = {'baby_name'  : b.babyname , 
+                                       'baby_birth' : b.birth } 
         for v in v_b:
-            dic = {'baby'           : {'baby_name'  : b.babyname , 
-                                       'baby_birth' : b.birth } ,
-                    'vaccine':{
+            print('************')
+            
+            dic= {}
+            dic['vaccine']={
                    'vaccine_name'   : v.vaccine.vacine_name , 
                    'dose_num'       : v.vaccine.dose_num,
-                   'static_duration': v.vaccine.static_duration,
+                #    'static_duration': v.vaccine.static_duration,
                    'taken'          : v.taken,
-                   'dead_line'      : v.dead_line}
+                   'dead_line'      : v.dead_line
                    } 
+            print( dic )
+
 
             lis.append(dic)
 
         print(5)
+        data['data']=lis
+        print( lis )
         
-        return Response({'data':lis})
+        return Response(data)

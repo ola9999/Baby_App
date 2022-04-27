@@ -23,6 +23,7 @@ def vaccines_view(request, id ):
         for v in v_b:
             print('************')
             
+            
             dic= {}
             dic['vaccine']={
                    'vaccine_name'   : v.vaccine.vacine_name , 

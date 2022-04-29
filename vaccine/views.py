@@ -21,21 +21,20 @@ def vaccines_view(request, id ):
         data ['baby']           = {'baby_name'  : b.babyname , 
                                        'baby_birth' : b.birth } 
         for v in v_b:
+
             print('************')
-            
-            
             dic= {}
-            dic['vaccine']={
-                   'vaccine_name'   : v.vaccine.vacine_name , 
-                   'dose_num'       : v.vaccine.dose_num,
-                #    'static_duration': v.vaccine.static_duration,
-                   'taken'          : v.taken,
-                   'dead_line'      : v.dead_line
-                   } 
+            dic[v.vaccine.static_duration+1 ]={
+                  'vaccine_name'   : v.vaccine.vacine_name , 
+                  'dose_num'       : v.vaccine.dose_num,
+               #    'static_duration': v.vaccine.static_duration,
+                  'taken'          : v.taken,
+                  'dead_line'      : v.dead_line
+                  } 
             print( dic )
 
 
-            lis.append(dic)
+            lis.append(dic) 
 
         print(5)
         data['data']=lis

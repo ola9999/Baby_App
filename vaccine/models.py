@@ -14,7 +14,7 @@ def calc_date(self):
 class All_Vaccines(models.Model):
     vacine_name 				= models.CharField(verbose_name="name", max_length=60)
     dose_num            = models.PositiveSmallIntegerField(default=1)
-    static_duration     = models.PositiveSmallIntegerField(default=1 , verbose_name = "static duration in monthes")
+    static_duration     = models.PositiveSmallIntegerField(default=1 , verbose_name = "static duration in monthes")#age start with 0 means the first month
 
 
 class B_V(models.Model):

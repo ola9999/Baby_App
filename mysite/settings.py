@@ -33,6 +33,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'account.apps.AccountConfig',
     'vaccine.apps.VaccineConfig',
+    'app.apps.AppConfig',
 
     'rest_framework',
 

@@ -2,7 +2,7 @@ from django.shortcuts import render
 from account.serializers import (RegistrationSerializer,
 								 SignInSerializer,
 								 )
-
+from datetime import  timedelta,date
 
 from rest_framework import status	
 from django.http.response import JsonResponse
@@ -35,10 +35,12 @@ def registration_view(request):
 			 
 			return JsonResponse(data, status=status.HTTP_400_BAD_REQUEST)
 
-		id = Account.objects.get(email=serializer.data.get('email')).id
-		data={'id':id}
+		account = Account.objects.get(email=serializer.data.get('email'))
+
+		data={'id':account.id}
+		data['age_in_days'] = account.age_in_days
+		data['age_in_months'] = int(account.age_in_days/30)
 		data.update(serializer.data)
-		
 		# return JsonResponse({'response':'successfully registered new user.'})
 		return Response(data , status=200)
 
@@ -67,8 +69,23 @@ def sign_in_view(request):
 		if serial_pass == pass_word:
 				# return JsonResponse({'response' : 'login successfully'})
 
-				id = Account.objects.get(email=serializer.data.get('email')).id
-				data={'id':id}
+				# id = Account.objects.get(email=serializer.data.get('email')).id
+				# data={'id':id}
+				account = Account.objects.get(email=serializer.data.get('email'))
+
+				data={
+					'id':account.id,
+					"babyname":account.babyname,
+					"father":account.father,
+					"mother":account.mother,
+					"address":account.address,
+					"birth": account.birth,
+					"pragnancyduration":account.pragnancyduration,
+					"gender":account.gender,
+					"cm_length":account.cm_length,
+					"kg_weight":account.kg_weight,
+					"arrangement_among_siblings":account.arrangement_among_siblings
+					}
 				data.update(serializer.data)
 
 				return JsonResponse(data)

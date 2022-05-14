@@ -39,4 +39,4 @@ class Tips(models.Model):
 
 
 class Album(models.Model):
-    image = models.ImageField(default=None, null=True, blank=True)
+    image = models.fileField(default=None, null=True, blank=True)

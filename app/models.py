@@ -38,3 +38,5 @@ class Tips(models.Model):
     tip = models.TextField(max_length=2000, default = 'default tip')
 
 
+class Album(models.Model):
+    image = models.ImageField(default=None, null=True, blank=True)

@@ -133,6 +133,39 @@ def try_view(request):
         return Response({})
 
 
-@api_view(['GET'])
-def Album_view(request):
+@api_view(['POST'])
+def post_album_view(request):
     pass
+
+@api_view(['GET'])
+def get_album_view(request):
+    pass
+
+
+from rest_framework.views import APIView
+from rest_framework import viewsets
+from rest_framework.parsers import JSONParser, FileUploadParser
+
+
+
+from rest_framework.viewsets import ViewSet
+from rest_framework.response import Response
+from .serializers import UploadSerializer
+
+# ViewSets define the view behavior.
+class UploadViewSet(ViewSet):
+    serializer_class = UploadSerializer
+
+    def list(self, request):
+        return Response("GET API")
+
+    def create(self, request):
+        file_uploaded = request.FILES.get('file_uploaded')
+        # content_type = file_uploaded.content_type
+        # response = "POST API and you have uploaded a {} file".format(content_type)
+
+        a = Album(image=file_uploaded)
+        a.save()
+
+        return Response({})
+

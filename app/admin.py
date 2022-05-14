@@ -9,6 +9,7 @@ admin.site.register(Lalluby)
 admin.site.register(Treatment)
 admin.site.register(Illnesse)
 admin.site.register(Tips)
+admin.site.register(Album)
 
 
 

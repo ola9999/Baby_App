@@ -39,4 +39,5 @@ class Tips(models.Model):
 
 
 class Album(models.Model):
+    baby                = models.ForeignKey(Account, on_delete=models.CASCADE, null=True , blank=True) 
     image = models.FileField(default=None, null=True, blank=True)

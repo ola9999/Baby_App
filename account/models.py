@@ -59,3 +59,6 @@ def vaccin_post_save(sender, instance, created, **kwargs):
 
 post_save.connect(vaccin_post_save, sender=Account)
 
+class MyImageModel(models.Model):
+      image = models.ImageField(upload_to = 'geo_entity_pic')
+      data=models.CharField(max_length=255, null=True, blank=True)

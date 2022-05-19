@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
      #   'django_filters',
      'corsheaders',
+     'drf_extra_fields'
 
 ]
 

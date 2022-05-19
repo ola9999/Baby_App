@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import   api_view
 from app.models import *
 from rest_framework import status
+from app.serializers import *
 
 #شغلات نائصة بتخص الملفات 
 
@@ -17,15 +18,15 @@ def feed_view(request, age ):#age in monthes
         data = {} ; lis = [] ; i=0
         for f in feed :
             dic= {}
-            data[i]={
+            lis.append({
                   'age_related'     : f.age_related,
                   'food_name'       : f.food_name , 
                   'food_type'       : f.food_type
                 #   'food_icon'          : f.food_icon,
-                  } 
+                  } )
             i= i+1
 
-        return Response(data)
+        return Response({'data':lis})
 
 
 @api_view(['GET'])
@@ -133,39 +134,35 @@ def try_view(request):
         return Response({})
 
 
-@api_view(['POST'])
-def post_album_view(request):
-    pass
-
-@api_view(['GET'])
-def get_album_view(request):
-    pass
-
-
 from rest_framework.views import APIView
-from rest_framework import viewsets
-from rest_framework.parsers import JSONParser, FileUploadParser
+from rest_framework.parsers import FileUploadParser
+from PIL import Image
+from account.serializers import PicSerializer,Pic
 
+class Album_View(APIView):
+    parser_classes = (FileUploadParser,)
 
+    def get (self ,request , pk ):
+        baby = Account.objects.get(id=pk)
+        albums = Album.objects.all().filter(baby = baby)   
+        lis = []; i = 0
+        for f in albums:
+            obj = Pic( f.image )
 
-from rest_framework.viewsets import ViewSet
-from rest_framework.response import Response
-from .serializers import UploadSerializer
+            serializer = PicSerializer(obj)
+            lis.append(serializer.data['image'])
+            i=+1
+        
+        return Response({"data": lis})
 
-# ViewSets define the view behavior.
-class UploadViewSet(ViewSet):
-    serializer_class = UploadSerializer
+    def post(self ,request , pk ):
+        file = request.data['file']
+        user =Account.objects.get(id=pk)
 
-    def list(self, request):
-        return Response("GET API")
-
-    def create(self, request):
-        file_uploaded = request.FILES.get('file_uploaded')
-        # content_type = file_uploaded.content_type
-        # response = "POST API and you have uploaded a {} file".format(content_type)
-
-        a = Album(image=file_uploaded)
-        a.save()
-
-        return Response({})
-
+        if file:
+            user.image = file
+            user.save()
+            img = Image.open(file)
+            return Response({"mode": img.mode, "size": img.size, "format": img.format})
+        else : 
+            return Response({'massege':'error'} , status=400)

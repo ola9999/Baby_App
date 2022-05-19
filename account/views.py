@@ -1,7 +1,5 @@
 from django.shortcuts import render
-from account.serializers import (RegistrationSerializer,
-								 SignInSerializer,
-								 )
+from account.serializers import *
 from datetime import  timedelta,date
 
 from rest_framework import status	
@@ -93,3 +91,37 @@ def sign_in_view(request):
 		else :
 				return JsonResponse({'response':'password is not correct'},status=400)
 	
+from rest_framework.views import APIView
+from rest_framework.parsers import FileUploadParser
+from PIL import Image
+
+class Profile_View(APIView):
+	parser_classes = (FileUploadParser,)
+	serializer_class = UploadSerializer
+
+	def get (self ,request , pk ):
+		file = Account.objects.get(id=pk).image
+		# image_file = Image.open(file)
+		# import pdb; pdb.set_trace()
+		# print(file)
+		# create a object of type Pic
+		obj = Pic( file)
+		serializer = PicSerializer(obj)
+		return Response({"file": serializer.data})
+		
+	def post(self ,request , pk ):
+		file = request.data['file']
+		# import pdb; pdb.set_trace()
+		# print(file)
+		user =Account.objects.get(id=pk)
+		
+
+		if file:
+			user.image = file
+			user.save()
+			img = Image.open(file)
+			return Response({"mode": img.mode, "size": img.size, "format": img.format})
+		else : 
+			return Response({'massege':'error'} , status=400)
+
+# return Response({"mode": img.mode, "size": img.size, "format": img.format})

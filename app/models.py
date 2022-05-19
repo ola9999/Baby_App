@@ -38,3 +38,6 @@ class Tips(models.Model):
     tip = models.TextField(max_length=2000, default = 'default tip')
 
 
+class Album(models.Model):
+    baby                = models.ForeignKey(Account, on_delete=models.CASCADE, null=True , blank=True) 
+    image = models.FileField(default=None, null=True, blank=True)

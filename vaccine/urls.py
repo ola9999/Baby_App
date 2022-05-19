@@ -5,6 +5,6 @@ from vaccine.views import *
 
 urlpatterns = [
 
-    path('<int:id>', vaccines_view, name='vaccines')# account id , baby age
+    path('vaccine/<int:id>', vaccines_view, name='vaccines')# account id , baby age
 
 ]

@@ -27,15 +27,12 @@ def all_views_view(request):#age in monthes
             pre+"illnesse/i",
 
             pre+"feed",
-            pre+"feed/1",
-
             pre+"sleep",
-            pre+"sleep/1",
-
             pre+"tips",
             pre+"lalluby",
             ],
-            "get&post":[            
+            "get&post":[     
+            "Content-Disposition:attachment; filename=sticker.png",
             pre+"profile/<int:pk>",
             pre+"album/<int:pk>",]}
 
@@ -69,7 +66,7 @@ def feed_view(request):#age in monthes
 
             data[f.age_related]=dic
             
-        return Response({'data':data})
+        return Response(data)
         
 
 @api_view(['GET'])

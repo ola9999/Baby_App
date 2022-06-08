@@ -82,9 +82,9 @@ def sign_in_view(request):
 					"gender":account.gender,
 					"cm_length":account.cm_length,
 					"kg_weight":account.kg_weight,
-					"arrangement_among_siblings":account.arrangement_among_siblings
+					"arrangement_among_siblings":account.arrangement_among_siblings,
+					"email":serializer.data['email']
 					}
-				data.update(serializer.data)
 
 				return JsonResponse(data)
 
@@ -113,15 +113,28 @@ class Profile_View(APIView):
 		file = request.data['file']
 		# import pdb; pdb.set_trace()
 		# print(file)
-		user =Account.objects.get(id=pk)
-		
-
 		if file:
+			user =Account.objects.get(id=pk)
 			user.image = file
 			user.save()
-			img = Image.open(file)
-			return Response({"mode": img.mode, "size": img.size, "format": img.format})
+			img =Account.objects.get(id=pk).image
+			obj = Pic( img)
+			serializer = PicSerializer(obj)
+			# img = Image.open(file)
+			# return Response({"mode": img.mode, "size": img.size, "format": img.format})
+			return Response({"file":serializer.data})
 		else : 
 			return Response({'massege':'error'} , status=400)
 
 # return Response({"mode": img.mode, "size": img.size, "format": img.format})
+# from rest_framework import viewsets
+# from account.serializers import *
+# from rest_framework.viewsets import ViewSet
+
+# class UploadViewSet(viewsets.ModelViewSet):
+#     queryset = Account.objects.all()
+#     serializer_class = UploadSerializer
+
+# 	@action(methods=["get"], detail=True)
+# 	def approvedRequests(self, request, employee_id)
+

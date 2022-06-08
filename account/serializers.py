@@ -54,3 +54,9 @@ class BabySerializer(serializers.ModelSerializer):
             'babyname',
             'birth',
             ]
+
+
+# class UploadSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Account
+#         fields = ('image',)

@@ -45,8 +45,7 @@ def feed_view(request):#age in monthes
     if request.method == 'GET': 
         
         feed = Feed.objects.all()
-
-        data = {} ; lis = [] 
+        data = {}
         for f in feed :
             s_v = Feed.objects.all().filter(age_related = f.age_related )
             
@@ -55,16 +54,16 @@ def feed_view(request):#age in monthes
                 obj =  s.food_icon
                 obj = Pic( obj )
                 serializer = PicSerializer(obj)
+                lis = [] 
 
-                dic[i]={
-                  'age_related'     : s.age_related,
+                lis.append( {
+                #   'age_related'     : s.age_related,
                   'food_name'       : s.food_name , 
                   'food_type'       : s.food_type,
                   'food_icon'          :serializer.data['image'] 
-                  } 
-                i= i+1
+                  } )
 
-            data[f.age_related]=dic
+            data[f.age_related]=lis
             
         return Response(data)
         
@@ -79,13 +78,20 @@ def sleep_view(request):
         data = {} 
         for sp in sleep :
             s_v = Sleep.objects.all().filter(age_related = sp.age_related )
-            dic= {}; i=0
-            for s in s_v:
-                dic[i]={
-                    'sleep_duration'       : s.sleep_duration 
-                    # ,'age_related'     : s.age_related
-                    } 
-                i= i+1
+            dic= {}; i=0; lis=[]
+            # for s in s_v:
+            #     lis.append( {
+            #         'sleep_duration'       : s.sleep_duration 
+            #         #  ,'age_related'     : s.age_related
+            #         } )
+            #     i= i+1
+            # data[sp.age_related]=dic
+            dic={
+                'sleep_duration'       : s.sleep_duration 
+                #  ,'age_related'     : s.age_related
+                }
+            
+
             data[sp.age_related]=dic
 
         return Response(data)
@@ -98,15 +104,15 @@ def tips_view(request):
         
         tip = Tips.objects.all()
         
-        data = {} ; i=0
+        data = {} ; i=0 ; lis=[]
         for t in tip :
-            data[i]={'tip'       : t.tip}
+            lis.append(t.tip)
 
             i= i+1
 
         print(data)
 
-        return Response(data)
+        return Response({"tips": lis})
 
 
 from django.db.models import Q
@@ -118,23 +124,23 @@ def ill_treat_search_view(request, ch ): # search ills start with {ch}
         
         illnesse = Illnesse.objects.all().filter( Q(ill_name__startswith=ch.lower())|  Q(ill_name__startswith=ch.upper()))
         
-        data = {} ; dic= {}; i=0;j=0
+        data = {} ; dic= {}; i=0;j=0 ; lis=[]
         for l in illnesse :
-            lis=[]
-            data[i]={
-                  'ill_name'       : l.ill_name 
-                #   'treats'     : [t.treat_name for t in l.treat.all()]
-                  } 
-            for t in l.treat.all():
-                dic[j]=t.treat_name
-                j+=1
+            
+            lis.append( {
+                  'ill_name'       : l.ill_name ,
+                  'treats'     : [t.treat_name for t in l.treat.all()]
+                  } )
+            # for t in l.treat.all():
+            #     dic[j]=t.treat_name
+            #     j+=1
 
-            data[i]['treats']= dic
+            # data[i]['treats']= lis
             i+=1
 
         print(data)
 
-        return Response(data)
+        return Response({"Illnesses":lis})
 
 from rest_framework.views import APIView
 from rest_framework.parsers import FileUploadParser

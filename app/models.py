@@ -10,7 +10,7 @@ class Feed(models.Model):
     food_type = models.CharField(max_length=25, null=True , default='default type')
     food_icon = models.ImageField(default=None, null=True, blank=True)
 
-    age_related = models.IntegerField(default= 1) # age related in years
+    age_related = models.IntegerField(default= 1) # age related in months
 
 def Feed_post_save(sender, instance, created, **kwargs):
 	if created:
@@ -24,7 +24,7 @@ post_save.connect(Feed_post_save, sender=Feed)
 
 class Sleep(models.Model):
     sleep_duration = models.IntegerField(default=16) #sleep_duration in hours
-    age_related = models.IntegerField(default= 1) # age related in years
+    age_related = models.IntegerField(default= 1) # age related in months
     
 import os
 class Lalluby(models.Model):
@@ -52,6 +52,7 @@ class Illnesse(models.Model):
 
 class Tips(models.Model):
     tip = models.TextField(max_length=2000, default = 'default tip')
+    age_related = models.CharField(max_length= 10 , default = '1' , null=False) # age related in months
 
 
 class Album(models.Model):

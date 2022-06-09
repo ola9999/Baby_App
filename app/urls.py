@@ -17,7 +17,7 @@ urlpatterns = [
     path('sleep', sleep_view, name='sleep'),#age in monthes
     # path('lalluby', lalluby_view, name='lalluby'),
     path('tips', tips_view, name='tips'),
-    path('album/<int:pk>', Album_View.as_view(), name='Album_View'),
+    path('album/<int:id>', Album_View.as_view(), name='Album_View'),
 
     path('', include(router.urls)),
 

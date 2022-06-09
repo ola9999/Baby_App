@@ -33,8 +33,8 @@ def all_views_view(request):#age in monthes
             ],
             "get&post":[     
             "Content-Disposition:attachment; filename=sticker.png",
-            pre+"profile/<int:pk>",
-            pre+"album/<int:pk>",]}
+            pre+"profile/<int:id>",
+            pre+"album/<int:id>",]}
 
     return Response(data)    
 
@@ -50,11 +50,12 @@ def feed_view(request):#age in monthes
             s_v = Feed.objects.all().filter(age_related = f.age_related )
             
             dic= {}; i=0
+            lis = [] 
             for s in s_v:
                 obj =  s.food_icon
                 obj = Pic( obj )
                 serializer = PicSerializer(obj)
-                lis = [] 
+                
 
                 lis.append( {
                 #   'age_related'     : s.age_related,
@@ -77,7 +78,7 @@ def sleep_view(request):
         
         data = {} 
         for sp in sleep :
-            s_v = Sleep.objects.all().filter(age_related = sp.age_related )
+            s_v = sleep.filter(age_related = sp.age_related )
             dic= {}; i=0; lis=[]
             # for s in s_v:
             #     lis.append( {
@@ -87,7 +88,7 @@ def sleep_view(request):
             #     i= i+1
             # data[sp.age_related]=dic
             dic={
-                'sleep_duration'       : s.sleep_duration 
+                'sleep_duration'       : sp.sleep_duration 
                 #  ,'age_related'     : s.age_related
                 }
             
@@ -103,17 +104,16 @@ def tips_view(request):
      if request.method == 'GET': 
         
         tip = Tips.objects.all()
-        
         data = {} ; i=0 ; lis=[]
+
         for t in tip :
+            s_v = Tips.objects.all().filter(age_related = t.age_related )
+            
             lis.append(t.tip)
+            for s in s_v:
+              data[t.age_related]=lis
 
-            i= i+1
-
-        print(data)
-
-        return Response({"tips": lis})
-
+        return Response(data)
 
 from django.db.models import Q
 
@@ -150,8 +150,8 @@ from account.serializers import PicSerializer,Pic
 class Album_View(APIView):
     parser_classes = (FileUploadParser,)
 
-    def get (self ,request , pk ):
-        baby = Account.objects.get(id=pk)
+    def get (self ,request , id ):
+        baby = Account.objects.get(id=id)
         albums = Album.objects.all().filter(baby = baby)   
         lis = []; i = 0
         for f in albums:
@@ -162,9 +162,9 @@ class Album_View(APIView):
         
         return Response({"data": lis})
 
-    def post(self ,request , pk ):
+    def post(self ,request , id ):
         file = request.data['file']
-        user =Account.objects.get(id=pk)
+        user =Account.objects.get(id=id)
 
         if file:
             user.image = file

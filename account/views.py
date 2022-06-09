@@ -99,30 +99,30 @@ class Profile_View(APIView):
 	parser_classes = (FileUploadParser,)
 	serializer_class = UploadSerializer
 
-	def get (self ,request , pk ):
-		file = Account.objects.get(id=pk).image
+	def get (self ,request , id ):
+		file = Account.objects.get(id=id).image
 		# image_file = Image.open(file)
 		# import pdb; pdb.set_trace()
 		# print(file)
 		# create a object of type Pic
 		obj = Pic( file)
 		serializer = PicSerializer(obj)
-		return Response({"file": serializer.data})
+		return Response( serializer.data)
 		
-	def post(self ,request , pk ):
+	def post(self ,request , id ):
 		file = request.data['file']
 		# import pdb; pdb.set_trace()
 		# print(file)
 		if file:
-			user =Account.objects.get(id=pk)
+			user =Account.objects.get(id=id)
 			user.image = file
 			user.save()
-			img =Account.objects.get(id=pk).image
+			img =Account.objects.get(id=id).image
 			obj = Pic( img)
 			serializer = PicSerializer(obj)
 			# img = Image.open(file)
 			# return Response({"mode": img.mode, "size": img.size, "format": img.format})
-			return Response({"file":serializer.data})
+			return Response(serializer.data)
 		else : 
 			return Response({'massege':'error'} , status=400)
 
@@ -138,3 +138,8 @@ class Profile_View(APIView):
 # 	@action(methods=["get"], detail=True)
 # 	def approvedRequests(self, request, employee_id)
 
+# custom 
+# backdrop=
+# events 
+
+# vid sensing

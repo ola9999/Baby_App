@@ -23,12 +23,14 @@ def all_views_view(request):#age in monthes
             pre+"vaccine/<int:id>",
             pre+"vaccine/1",
 
+            pre+"check_vaccine/1/96",
+
             pre+"feed/1",
             pre+"sleep/1",
             pre+"tips/1",
             
             pre+"illnesse/<str:ch>",
-            pre+"illnesse/i",
+            pre+"illnesse/ا",
 
             pre+"lalluby",
             ],
@@ -60,15 +62,17 @@ def feed_view(request, id ):#age in monthes # changed
             obj =  s.food_icon
             obj = Pic( obj )
             serializer = PicSerializer(obj)
+            print([s.food_name for s in s_v.filter(food_type=s.food_type)])
 
-            lis.append( {
+            dic[s.food_type]=[s.food_name for s in s_v.filter(food_type=s.food_type)]
                 # 'month'     : s.age_related,
-                'food_name'       : s.food_name , 
-                'food_type'       : s.food_type,
+                # s.food_type       : [s.food_name for s in s_v.filter(food_type=s.food_type)]
+                # 'food_type'       : s.food_type,
                 # 'food_icon'       :serializer.data['image'] 
-                } )
-            
-        return Response(lis)
+                # } )
+
+        # lis.append(dic)
+        return Response(dic)
         
 
 @api_view(['GET'])
@@ -90,10 +94,13 @@ def sleep_view(request, id): # has changed
         return Response(lis)
 
 
+from django.db.models import Q
 @api_view(['GET'])
 def tips_view(request, id):# has changed
 
      if request.method == 'GET': 
+
+        # b = B_V.objects.get(Q(baby=baby) &  Q(id=vaccin_id)) 
 
         age_related = int((Account.objects.get(id = id).age_in_days)/30) +1
 
@@ -104,11 +111,9 @@ def tips_view(request, id):# has changed
             # lis.append(t.tip)
             # data[t.age_related]=lis
 
-            lis.append({
-                'tip'       : t.tip 
-                })
+            lis.append(t.tip)
 
-        return Response(lis)
+        return Response({'tips':lis})
 
 from django.db.models import Q
 

@@ -22,6 +22,7 @@ def vaccines_view(request, id ):
 
         for s in s_v:
             lis.append({
+               'id'             : s.id,       
                'vaccine_name'   : s.vaccine.vacine_name , 
                'dose_num'       : s.vaccine.dose_num,
                'month': age_related+1,
@@ -30,7 +31,24 @@ def vaccines_view(request, id ):
                })
 
         return Response(lis)
-            
+
+from django.db.models import Q
+
+@api_view(['GET'])
+def check_vaccine_view(request, baby_id , vaccin_id ):
+   if request.method == 'GET': 
+      
+      baby = Account.objects.get(id=baby_id)
+      b = B_V.objects.get(Q(baby=baby) &  Q(id=vaccin_id))
+      print(b)
+      b.taken = 1-b.taken
+      print(b.taken)
+      b.save()
+      print(2)
+
+      return Response({"check":bool(b.taken)},status=200)
+
+
             # lis.append(dic) 
             # {1 : {0:{'abcabc':'cdecde'},
             #       1:{'efg':'hij'}, 

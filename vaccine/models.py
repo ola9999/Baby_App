@@ -10,7 +10,7 @@ from functools import partial
 def calc_date(self):
     return self.baby.birth + timedelta(days = self.vaccine.static_duration*30)
 
-
+################
 class All_Vaccines(models.Model):
     vacine_name 				= models.CharField(verbose_name="name", max_length=60)
     dose_num            = models.PositiveSmallIntegerField(default=1)

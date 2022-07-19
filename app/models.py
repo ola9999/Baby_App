@@ -13,7 +13,7 @@ class Feed(models.Model):
     age_related = models.IntegerField(default= 1) # age related in months
 
 def Feed_post_save(sender, instance, created, **kwargs):
-	if created:
+	if created and instance.food_icon != None :
             image = Image.open(instance.food_icon)
             image = image.resize((50,50))
             instance.food_icon = image
@@ -51,7 +51,8 @@ class Illnesse(models.Model):
 
 
 class Tips(models.Model):
-    tip = models.TextField(max_length=2000, default = 'default tip')
+    title =       models.TextField(max_length=2000, default = 'default title', null=True, blank=True)
+    tip =         models.TextField(max_length=2000, default = 'default tip', null=True, blank=True)
     age_related = models.CharField(max_length= 10 , default = '1' , null=False) # age related in months
 
 

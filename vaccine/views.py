@@ -12,28 +12,24 @@ from rest_framework import status
 def vaccines_view(request, id ):
 
      if request.method == 'GET': 
-        
+
         b = Account.objects.get(id=id)
-        data = {};lis = []; vac={}; i=0
-        v_b = B_V.objects.all().filter(baby= b)
+        age_related = int(b.age_in_days/30) 
 
-        for v in v_b:
-            s_v = B_V.objects.all().filter(baby= b).filter(vaccine__static_duration=v.vaccine.static_duration)
-            dic={};i=0 ; lis = []
-            for s in s_v:
-               lis.append({
-                  'vaccine_name'   : s.vaccine.vacine_name , 
-                  'dose_num'       : s.vaccine.dose_num,
-                  # 'static_duration': v.vaccine.static_duration,
-                  'taken'          : s.taken,
-                  'dead_line'      : s.dead_line
-                  })
-               i=+1
+        lis = []; i=0
 
-            data[v.vaccine.static_duration+1 ]=lis
+        s_v = B_V.objects.all().filter(baby= b).filter(vaccine__static_duration=age_related)
 
-            print(data)
-        return Response(data)
+        for s in s_v:
+            lis.append({
+               'vaccine_name'   : s.vaccine.vacine_name , 
+               'dose_num'       : s.vaccine.dose_num,
+               'month': age_related+1,
+               'taken'          : s.taken,
+               'dead_line'      : s.dead_line
+               })
+
+        return Response(lis)
             
             # lis.append(dic) 
             # {1 : {0:{'abcabc':'cdecde'},

@@ -13,10 +13,10 @@ urlpatterns = [
     path('', all_views_view, name='all_views_view'),
 
     path('illnesse/<str:ch>', ill_treat_search_view, name='illnesse'),
-    path('feed', feed_view, name='feed'), #age in monthes
-    path('sleep', sleep_view, name='sleep'),#age in monthes
+    path('feed/<int:id>', feed_view, name='feed'), #age in monthes
+    path('sleep/<int:id>', sleep_view, name='sleep'),#age in monthes
     # path('lalluby', lalluby_view, name='lalluby'),
-    path('tips', tips_view, name='tips'),
+    path('tips/<int:id>', tips_view, name='tips'),
     path('album/<int:id>', Album_View.as_view(), name='Album_View'),
 
     path('', include(router.urls)),

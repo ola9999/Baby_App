@@ -104,7 +104,6 @@ class Profile_View(APIView):
 		# image_file = Image.open(file)
 		# import pdb; pdb.set_trace()
 		# print(file)
-		# create a object of type Pic
 		obj = Pic( file)
 		serializer = PicSerializer(obj)
 		return Response( serializer.data)

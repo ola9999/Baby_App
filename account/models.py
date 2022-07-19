@@ -21,7 +21,7 @@ class Account(models.Model):
 	address					= models.CharField(max_length=250, default="default")
 
 	birth					= models.DateField(auto_now=False,default= date.today(),null=True, verbose_name="birth" )
-	age_in_days				= models.IntegerField(verbose_name="age in days", null=True, default=None)#age in days
+	age_in_days				= models.IntegerField(verbose_name="age in days", null=True, default=None, blank=True)#age in days
 
 	pragnancyduration		= models.CharField(max_length=2 , default="9")
 	gender					= models.CharField(max_length=10 ,choices=BABY_GENDER , default="default")

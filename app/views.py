@@ -23,12 +23,13 @@ def all_views_view(request):#age in monthes
             pre+"vaccine/<int:id>",
             pre+"vaccine/1",
 
+            pre+"feed/1",
+            pre+"sleep/1",
+            pre+"tips/1",
+            
             pre+"illnesse/<str:ch>",
             pre+"illnesse/i",
 
-            pre+"feed",
-            pre+"sleep",
-            pre+"tips",
             pre+"lalluby",
             ],
             "get&post":[     
@@ -40,80 +41,74 @@ def all_views_view(request):#age in monthes
 
 
 @api_view(['GET'])
-def feed_view(request):#age in monthes
+def feed_view(request, id ):#age in monthes # changed
     
     if request.method == 'GET': 
         
-        feed = Feed.objects.all()
+        # feed = Feed.objects.all()
         data = {}
-        for f in feed :
-            s_v = Feed.objects.all().filter(age_related = f.age_related )
-            
-            dic= {}; i=0
-            lis = [] 
-            for s in s_v:
-                obj =  s.food_icon
-                obj = Pic( obj )
-                serializer = PicSerializer(obj)
-                
 
-                lis.append( {
-                #   'age_related'     : s.age_related,
-                  'food_name'       : s.food_name , 
-                  'food_type'       : s.food_type,
-                  'food_icon'          :serializer.data['image'] 
-                  } )
+        age_related = int((Account.objects.get(id = id).age_in_days)/30) +1
 
-            data[f.age_related]=lis
+        s_v = Feed.objects.all().filter(age_related = age_related )
+
+        lis = [] 
             
-        return Response(data)
+        dic= {}; i=0
+        
+        for s in s_v:
+            obj =  s.food_icon
+            obj = Pic( obj )
+            serializer = PicSerializer(obj)
+
+            lis.append( {
+                # 'month'     : s.age_related,
+                'food_name'       : s.food_name , 
+                'food_type'       : s.food_type,
+                # 'food_icon'       :serializer.data['image'] 
+                } )
+            
+        return Response(lis)
         
 
 @api_view(['GET'])
-def sleep_view(request):
+def sleep_view(request, id): # has changed
 
      if request.method == 'GET': 
         
-        sleep = Sleep.objects.all()
-        
-        data = {} 
+        age_related = int((Account.objects.get(id = id).age_in_days)/30) +1
+
+        sleep = Sleep.objects.all().filter(age_related = age_related )
+        lis=[]
         for sp in sleep :
-            s_v = sleep.filter(age_related = sp.age_related )
-            dic= {}; i=0; lis=[]
-            # for s in s_v:
-            #     lis.append( {
-            #         'sleep_duration'       : s.sleep_duration 
-            #         #  ,'age_related'     : s.age_related
-            #         } )
-            #     i= i+1
-            # data[sp.age_related]=dic
-            dic={
+
+            lis.append({
                 'sleep_duration'       : sp.sleep_duration 
-                #  ,'age_related'     : s.age_related
-                }
-            
+                # ,'month'     : sp.age_related
+                })
 
-            data[sp.age_related]=dic
-
-        return Response(data)
+        return Response(lis)
 
 
 @api_view(['GET'])
-def tips_view(request):
+def tips_view(request, id):# has changed
 
      if request.method == 'GET': 
-        
-        tip = Tips.objects.all()
-        data = {} ; i=0 ; lis=[]
 
-        for t in tip :
-            s_v = Tips.objects.all().filter(age_related = t.age_related )
-            
-            lis.append(t.tip)
-            for s in s_v:
-              data[t.age_related]=lis
+        age_related = int((Account.objects.get(id = id).age_in_days)/30) +1
 
-        return Response(data)
+        tip = Tips.objects.all().filter(age_related = age_related )
+        lis=[]
+
+        for t in tip:
+            # lis.append(t.tip)
+            # data[t.age_related]=lis
+
+            lis.append({
+                'tip'       : t.tip 
+                })
+
+        return Response(lis)
 
 from django.db.models import Q
 
@@ -123,7 +118,7 @@ def ill_treat_search_view(request, ch ): # search ills start with {ch}
      if request.method == 'GET':
         
         illnesse = Illnesse.objects.all().filter( Q(ill_name__startswith=ch.lower())|  Q(ill_name__startswith=ch.upper()))
-        
+
         data = {} ; dic= {}; i=0;j=0 ; lis=[]
         for l in illnesse :
             

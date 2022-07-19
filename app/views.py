@@ -23,6 +23,8 @@ def all_views_view(request):#age in monthes
             pre+"vaccine/<int:id>",
             pre+"vaccine/1",
 
+            pre+"check_vaccine/1/96",
+
             pre+"feed/1",
             pre+"sleep/1",
             pre+"tips/1",

@@ -5,9 +5,18 @@ from vaccine.models import *
 from django.db.models.signals import pre_save, post_save
 from PIL import Image
 
+TYPES = (
+    ('رضاعة طبيعية','رضاعة طبيعية'),
+    ('حليب صناعي','حليب صناعي'),
+	('فواكه','فواكه'),
+	('خضار','خضار'),
+	('نشويات','نشويات'),
+	('دسم','دسم'),
+	('ماء','ماء'),
+)
 class Feed(models.Model):
-    food_name = models.CharField(max_length=25, null=True , default='default food') 
-    food_type = models.CharField(max_length=25, null=True , default='default type')
+    food_name = models.CharField(max_length=100, null=True , default='default food') 
+    food_type = models.CharField(max_length=25,choices=TYPES, null=True , default='default type')
     food_icon = models.ImageField(default=None, null=True, blank=True)
 
     age_related = models.IntegerField(default= 1) # age related in months

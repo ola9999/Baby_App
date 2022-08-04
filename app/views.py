@@ -1,11 +1,10 @@
 from django.shortcuts import render
 from django.http.response import JsonResponse
+from rest_framework.serializers import Serializer
 from rest_framework.response import Response
 from rest_framework.decorators import   api_view
 from app.models import *
 from rest_framework import status
-# from app.serializers import *
-from PIL import Image
 
 
 @api_view(['GET'])
@@ -19,11 +18,12 @@ def all_views_view(request):#age in monthes
             "get":[
             pre+"admin",  
             pre+"profile/1",
-
+            '........................',
             pre+"vaccine/<int:id>",
             pre+"vaccine/1",
 
             pre+"check_vaccine/1/96",
+            '........................',
 
             pre+"feed/1",
             pre+"sleep/1",
@@ -31,13 +31,18 @@ def all_views_view(request):#age in monthes
             
             pre+"illnesse/<str:ch>",
             pre+"illnesse/ا",
-
-            pre+"lalluby",
+            '........................',
+            pre+"get_lalluby",
             ],
+
             "get&post":[     
             "Content-Disposition:attachment; filename=sticker.png",
+            '........................',
             pre+"profile/<int:id>",
-            pre+"album/<int:id>",]}
+            pre+"album/<int:id>",
+            pre+"album/1",
+            '........................',
+            pre+'send_lalluby/',]}
 
     return Response(data)    
 
@@ -46,33 +51,16 @@ def all_views_view(request):#age in monthes
 def feed_view(request, id ):#age in monthes # changed
     
     if request.method == 'GET': 
-        
-        # feed = Feed.objects.all()
-        data = {}
 
         age_related = int((Account.objects.get(id = id).age_in_days)/30) +1
-
-        s_v = Feed.objects.all().filter(age_related = age_related )
-
-        lis = [] 
-            
-        dic= {}; i=0
+        food = Feed.objects.all().filter(age_related = age_related )
+        dic={}
         
-        for s in s_v:
-            obj =  s.food_icon
-            obj = Pic( obj )
-            serializer = PicSerializer(obj)
-            print([s.food_name for s in s_v.filter(food_type=s.food_type)])
+        for f in food:
+            dic[f.food_type]=[s.food_name for s in food.filter(food_type=f.food_type)]
 
-            dic[s.food_type]=[s.food_name for s in s_v.filter(food_type=s.food_type)]
-                # 'month'     : s.age_related,
-                # s.food_type       : [s.food_name for s in s_v.filter(food_type=s.food_type)]
-                # 'food_type'       : s.food_type,
-                # 'food_icon'       :serializer.data['image'] 
-                # } )
-
-        # lis.append(dic)
-        return Response(dic)
+        data=[dic]
+        return JsonResponse({'response':'ok',"food":data})
         
 
 @api_view(['GET'])
@@ -81,17 +69,10 @@ def sleep_view(request, id): # has changed
      if request.method == 'GET': 
         
         age_related = int((Account.objects.get(id = id).age_in_days)/30) +1
-
         sleep = Sleep.objects.all().filter(age_related = age_related )
-        lis=[]
-        for sp in sleep :
-
-            lis.append({
-                'sleep_duration'       : sp.sleep_duration 
-                # ,'month'     : sp.age_related
-                })
-
-        return Response(lis)
+        lis=[s.sleep_duration for s in sleep.filter(age_related=age_related)]
+        
+        return JsonResponse({'response':'ok','sleep':lis[0]})
 
 
 from django.db.models import Q
@@ -100,20 +81,15 @@ def tips_view(request, id):# has changed
 
      if request.method == 'GET': 
 
-        # b = B_V.objects.get(Q(baby=baby) &  Q(id=vaccin_id)) 
-
         age_related = int((Account.objects.get(id = id).age_in_days)/30) +1
-
         tip = Tips.objects.all().filter(age_related = age_related )
         lis=[]
 
         for t in tip:
-            # lis.append(t.tip)
-            # data[t.age_related]=lis
+            lis.append({'title':t.title,
+                        'tip'  :t.tip})
 
-            lis.append(t.tip)
-
-        return Response({'tips':lis})
+        return JsonResponse({'response':'ok','tips':lis})
 
 from django.db.models import Q
 
@@ -124,75 +100,54 @@ def ill_treat_search_view(request, ch ): # search ills start with {ch}
         
         illnesse = Illnesse.objects.all().filter( Q(ill_name__startswith=ch.lower())|  Q(ill_name__startswith=ch.upper()))
 
-        data = {} ; dic= {}; i=0;j=0 ; lis=[]
+        lis=[];i=0
         for l in illnesse :
             
             lis.append( {
                   'ill_name'       : l.ill_name ,
                   'treats'     : [t.treat_name for t in l.treat.all()]
                   } )
-            # for t in l.treat.all():
-            #     dic[j]=t.treat_name
-            #     j+=1
-
-            # data[i]['treats']= lis
             i+=1
 
-        print(data)
+        return JsonResponse({'response':'ok',"Illnesses":lis})
 
-        return Response({"Illnesses":lis})
-
+from rest_framework.parsers import MultiPartParser, FormParser ,FileUploadParser
 from rest_framework.views import APIView
-from rest_framework.parsers import FileUploadParser
-from PIL import Image
-from account.serializers import PicSerializer,Pic
-
-class Album_View(APIView):
-    parser_classes = (FileUploadParser,)
-
-    def get (self ,request , id ):
-        baby = Account.objects.get(id=id)
-        albums = Album.objects.all().filter(baby = baby)   
-        lis = []; i = 0
-        for f in albums:
-            obj = Pic( f.image )
-            serializer = PicSerializer(obj)
-            lis.append(serializer.data['image'])
-            i=+1
-        
-        return Response({"data": lis})
-
-    def post(self ,request , id ):
-        file = request.data['file']
-        user =Account.objects.get(id=id)
-
-        if file:
-            user.image = file
-            user.save()
-            img = Image.open(file)
-            return Response({"response": "image saved" })
-        else : 
-            return Response({'response':'error'} , status=400)
-
 from rest_framework import viewsets
 from app.serializers import *
 from rest_framework.viewsets import ViewSet
 
+class Album_View(viewsets.ModelViewSet):
+    queryset =  Album.objects.all()
+    serializer_class = AlbumSerializer
+    parser_classes = (MultiPartParser, FormParser)
+
+
+    def get (self ,request , id= None ):
+        baby = Account.objects.get(id=id)
+        albums = Album.objects.all().filter(baby = baby)   
+        serializer = AlbumSerializer(albums, many = True)
+        lis=[]
+        for s in serializer.data:
+            lis.append(s['image'])
+        return JsonResponse({'response':'ok','images' : lis})
+
+    def post(self, request, id=None ):
+        print(request.data)
+        user = Account.objects.get(id=id)
+        albums = Album(baby =user , image =request.data['image'] )
+        albums.save()
+        return JsonResponse({'response': 'image saved'})
+
+
 class LallubyViewSet(viewsets.ModelViewSet):
     queryset = Lalluby.objects.all()
-    serializer_class = UploadSerializer
+    serializer_class = LallubySerializer
 
-# @api_view(['GET'])
-# def lalluby_view(request):
+import requests
 
-#      if request.method == 'GET': 
-#         lalluby = Lalluby.objects.all()
-#         data = {} ; lis = [] ; i=0
-#         for l in lalluby :
-#             dic= {}
-#             data[i]={
-#                   'song_name'       : l.song_name , 
-#                 #   'file'     : l.file
-#                   } 
-#             i= i+1
-#         return Response(data)
+def lall(request):
+    #pull data from third party rest api
+    response = requests.get('http://127.0.0.1:8000/send_lalluby/')
+    songs = response.json()
+    return JsonResponse({'response':'ok',"tracks":songs})

@@ -30,7 +30,7 @@ def vaccines_view(request, id ):
                'dead_line'      : s.dead_line
                })
 
-        return Response(lis)
+        return Response({'response':'ok','vaccines':lis})
 
 from django.db.models import Q
 
@@ -40,39 +40,7 @@ def check_vaccine_view(request, baby_id , vaccin_id ):
       
       baby = Account.objects.get(id=baby_id)
       b = B_V.objects.get(Q(baby=baby) &  Q(id=vaccin_id))
-      print(b)
       b.taken = 1-b.taken
-      print(b.taken)
       b.save()
-      print(2)
 
       return Response({"check":bool(b.taken)},status=200)
-
-
-            # lis.append(dic) 
-            # {1 : {0:{'abcabc':'cdecde'},
-            #       1:{'efg':'hij'}, 
-            #       2:{'klmn':'opq'},
-            #       3:{'rstu':'vwx'}
-            #       }
-            #  3 : {0:{'abcabc':'cdecde'},
-            #       1:{'efg':'hij'}, 
-            #       }}
-            #  4 : {0:{'abcabc':'cdecde'},
-            #       1:{'efg':'hij'}, 
-            #       2:{'klmn':'opq'},
-            #       }
-                  # }
-      #   data['data']=lis
-      #   print( lis )
-        
-
-      #   {0: {0: {'vaccine_name': 'Hepatities B'},
-      #          1: {'vaccine_name': 'BCG'}, 
-      #         2: {'vaccine_name': 'Polio'}}, 
-      #    2: {0: {'vaccine_name': 'DTP'}, 
-      #          1: {'vaccine_name': 'Hepatities B'}, 
-      #          2: {'vaccine_name': 'Oral Polio'}},
-      #    4: {0: {'vaccine_name': 'DTP'},
-      #        1: {'vaccine_name': 'Oral Polio'}},
-      #    1: {0: {'vaccine_name': 'k'}}}

@@ -3,21 +3,19 @@ from rest_framework import serializers
 from account.models import Account
 from rest_framework.serializers import Serializer, FileField
 
-class Pic(object):
-    def __init__(self, image):
-        self.image = image
-
-class PicSerializer(serializers.Serializer):
-    # initialize fields
-    image = serializers.ImageField()
-
-
     
 class UploadSerializer(Serializer):
-    file_uploaded = FileField()
+    image = FileField()
     class Meta:
-        fields = ['file_uploaded']
+        fields = ['image']
 
+class ProfileSerializer(serializers.ModelSerializer):
+
+    image = serializers.ImageField(required=True)
+
+    class Meta:
+        model = Account
+        fields = ('image',)
 
 class RegistrationSerializer(serializers.ModelSerializer):
     # profile = ProfileSerializer(read_only=True)
@@ -54,9 +52,3 @@ class BabySerializer(serializers.ModelSerializer):
             'babyname',
             'birth',
             ]
-
-
-# class UploadSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Account
-#         fields = ('image',)

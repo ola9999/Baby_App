@@ -1,4 +1,4 @@
-from django.shortcuts import render
+
 from account.serializers import *
 from datetime import  timedelta,date
 
@@ -10,8 +10,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import   api_view
 from django.core.exceptions import ObjectDoesNotExist
 
-from rest_framework import status  
-from rest_framework.response import Response
+# from rest_framework.response import Response
 
 from account.models import Account
 from vaccine.models import B_V,All_Vaccines
@@ -39,9 +38,10 @@ def registration_view(request):
 		data['age_in_days'] = account.age_in_days
 		data['age_in_months'] = int(account.age_in_days/30)
 		data.update(serializer.data)
-		# return JsonResponse({'response':'successfully registered new user.'})
-		return Response(data , status=200)
+		res={'response' : 'successfully registered new user',
+				'data' : data }
 
+		return JsonResponse(res, status=200)
 
 @api_view(['POST'])
 def sign_in_view(request):
@@ -55,90 +55,55 @@ def sign_in_view(request):
 		try:
 			serial_email = serializer.data.get("email")
 			print(111) 
+			serial_pass=serializer.data.get("password")
+			pass_word = Account.objects.get(email=serializer.data.get('email')).password
+			if serial_pass == pass_word:
+					account = Account.objects.get(email=serializer.data.get('email'))
+
+					data={
+						'id':account.id,
+						"babyname":account.babyname,
+						"father":account.father,
+						"mother":account.mother,
+						"address":account.address,
+						"birth": account.birth,
+						"pragnancyduration":account.pragnancyduration,
+						"gender":account.gender,
+						"cm_length":account.cm_length,
+						"kg_weight":account.kg_weight,
+						"arrangement_among_siblings":account.arrangement_among_siblings,
+						"email":serializer.data['email']
+						}
+					res={'response' : 'login successfully',
+						 'data' : data }
+
+					return JsonResponse(res)
+
+			else :
+					return JsonResponse({'response':'password is not correct'},status=400)
+
 		except Account.DoesNotExist:
 			print(222)
 			return  JsonResponse({'response': 'This user does not exist'})
-
 	
-		serial_pass=serializer.data.get("password")
-		pass_word = Account.objects.get(email=serializer.data.get('email')).password
+from rest_framework.parsers import MultiPartParser, FormParser ,FileUploadParser
+from rest_framework import viewsets
+from rest_framework.viewsets import ViewSet
 
+class Profile_View(viewsets.ViewSet):
+	queryset = Account.objects.all().filter()
+	serializer_class = ProfileSerializer
+	parser_classes = (MultiPartParser, FormParser)
 
-		if serial_pass == pass_word:
-				# return JsonResponse({'response' : 'login successfully'})
+	def get(self , request , id= None ):
+		user = Account.objects.get(id=id)
+		serializer = ProfileSerializer(user )
+		return JsonResponse({'response': 'ok', 'image':serializer.data['image'] })
 
-				# id = Account.objects.get(email=serializer.data.get('email')).id
-				# data={'id':id}
-				account = Account.objects.get(email=serializer.data.get('email'))
+	def post(self , request , id=None):
+		image = request.data['image']
+		user = Account.objects.get(id=id)
+		user.image = image
+		user.save()
+		return JsonResponse({'response':'image saved'})
 
-				data={
-					'id':account.id,
-					"babyname":account.babyname,
-					"father":account.father,
-					"mother":account.mother,
-					"address":account.address,
-					"birth": account.birth,
-					"pragnancyduration":account.pragnancyduration,
-					"gender":account.gender,
-					"cm_length":account.cm_length,
-					"kg_weight":account.kg_weight,
-					"arrangement_among_siblings":account.arrangement_among_siblings,
-					"email":serializer.data['email']
-					}
-
-				return JsonResponse(data)
-
-		else :
-				return JsonResponse({'response':'password is not correct'},status=400)
-	
-from rest_framework.views import APIView
-from rest_framework.parsers import FileUploadParser
-from PIL import Image
-
-class Profile_View(APIView):
-	parser_classes = (FileUploadParser,)
-	serializer_class = UploadSerializer
-
-	def get (self ,request , id ):
-		file = Account.objects.get(id=id).image
-		# image_file = Image.open(file)
-		# import pdb; pdb.set_trace()
-		# print(file)
-		obj = Pic( file)
-		serializer = PicSerializer(obj)
-		return Response( serializer.data)
-		
-	def post(self ,request , id ):
-		file = request.data['file']
-		# import pdb; pdb.set_trace()
-		# print(file)
-		if file:
-			user =Account.objects.get(id=id)
-			user.image = file
-			user.save()
-			img =Account.objects.get(id=id).image
-			obj = Pic( img)
-			serializer = PicSerializer(obj)
-			# img = Image.open(file)
-			# return Response({"mode": img.mode, "size": img.size, "format": img.format})
-			return Response(serializer.data)
-		else : 
-			return Response({'massege':'error'} , status=400)
-
-# return Response({"mode": img.mode, "size": img.size, "format": img.format})
-# from rest_framework import viewsets
-# from account.serializers import *
-# from rest_framework.viewsets import ViewSet
-
-# class UploadViewSet(viewsets.ModelViewSet):
-#     queryset = Account.objects.all()
-#     serializer_class = UploadSerializer
-
-# 	@action(methods=["get"], detail=True)
-# 	def approvedRequests(self, request, employee_id)
-
-# custom 
-# backdrop=
-# events 
-
-# vid sensing

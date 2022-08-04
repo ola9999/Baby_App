@@ -7,17 +7,23 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 router = routers.DefaultRouter()
-router.register('lalluby', LallubyViewSet, basename="lalluby")
+router.register('album', Album_View, basename="album")
+router.register('send_lalluby', LallubyViewSet, basename="send_lalluby")
 
 urlpatterns = [
-    path('', all_views_view, name='all_views_view'),
+    
+
+    path('album/<int:id>', Album_View.as_view({'post': 'post'}) , name='Album_View'),
+    path('album/<int:id>', Album_View.as_view({'get': 'get'}) , name='Album_View'),
 
     path('illnesse/<str:ch>', ill_treat_search_view, name='illnesse'),
     path('feed/<int:id>', feed_view, name='feed'), #age in monthes
     path('sleep/<int:id>', sleep_view, name='sleep'),#age in monthes
-    # path('lalluby', lalluby_view, name='lalluby'),
     path('tips/<int:id>', tips_view, name='tips'),
-    path('album/<int:id>', Album_View.as_view(), name='Album_View'),
+
+    path('get_lalluby', lall, name='lalluby'),
+
+    path('all', all_views_view, name='all_views_view'),
 
     path('', include(router.urls)),
 

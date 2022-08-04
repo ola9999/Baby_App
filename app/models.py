@@ -6,14 +6,15 @@ from django.db.models.signals import pre_save, post_save
 from PIL import Image
 
 TYPES = (
-    ('رضاعة طبيعية','رضاعة طبيعية'),
-    ('حليب صناعي','حليب صناعي'),
-	('فواكه','فواكه'),
-	('خضار','خضار'),
-	('نشويات','نشويات'),
-	('دسم','دسم'),
-	('ماء','ماء'),
+    ('N_milk','Nmilk'),
+    ('Fmilk','Fmilk'),
+	('water','water'),
+	('fruits','fruits'),
+	('vegetables','vegetables'),
+	('cyrbohedats','cyrbohedats'),
+	('cremy','cremy'),
 )
+
 class Feed(models.Model):
     food_name = models.CharField(max_length=100, null=True , default='default food') 
     food_type = models.CharField(max_length=25,choices=TYPES, null=True , default='default type')

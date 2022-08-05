@@ -102,7 +102,7 @@ def sign_in_view(request):
 
 # 		res={'response' :'ok','data' : data }
 
-
+#
 # 		return  JsonResponse(res)
 		
 

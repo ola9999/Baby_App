@@ -52,3 +52,17 @@ class BabySerializer(serializers.ModelSerializer):
             'babyname',
             'birth',
             ]
+# email
+# password
+# babyname
+# father
+# mother
+# address
+# birth
+# age_in_days
+# pragnancyduration
+# gender
+# cm_length
+# kg_weight
+# arrangement_among_siblings
+# image

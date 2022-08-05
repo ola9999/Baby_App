@@ -109,3 +109,38 @@ def sign_in_view(request):
 from rest_framework.parsers import MultiPartParser, FormParser ,FileUploadParser
 from rest_framework import viewsets
 from rest_framework.viewsets import ViewSet
+
+class Profile_View(viewsets.ViewSet):
+	queryset = Account.objects.all().filter()
+	serializer_class = ProfileSerializer
+	parser_classes = (MultiPartParser, FormParser)
+
+	def get(self , request , id= None ):
+		user = Account.objects.get(id=id)
+		image = ProfileSerializer(user )
+		user_datail = RegistrationSerializer(user)
+		print (user_datail.data)
+
+		data={'id':user.id}
+		data['age_in_days'] = user.age_in_days
+		data['age_in_months'] = int(user.age_in_days/30)
+		data.update(user_datail.data)
+		data['image'] = image.data['image']
+
+		res={'response' :'ok','data' : data }
+
+		return JsonResponse({'response': 'ok', 'data' : res})
+
+	def post(self , request , id=None):
+		print(request.data['image'])
+		image = request.data['image']
+		user = Account.objects.get(id=id)
+		user.image = image
+		user.save()
+		return JsonResponse({'response':'image saved'})
+
+	def profile_pic(self , request , id= None ):
+		user = Account.objects.get(id=id)
+		image = ProfileSerializer(user )
+
+		return JsonResponse({'response': 'ok', 'image' : image.data['image']})

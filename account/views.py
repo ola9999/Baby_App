@@ -86,6 +86,26 @@ def sign_in_view(request):
 			print(222)
 			return  JsonResponse({'response': 'This user does not exist'})
 	
+@api_view(['GET'])
+def user_detail_view(request,id):
+
+	if request.method == 'GET':
+
+		account = Account.objects.get(id=id)
+		serializer = RegistrationSerializer(account)
+		print (serializer.data)
+
+		data={'id':account.id}
+		data['age_in_days'] = account.age_in_days
+		data['age_in_months'] = int(account.age_in_days/30)
+		data.update(serializer.data)
+
+		res={'response' :'ok','data' : data }
+
+
+		return  JsonResponse(res)
+		
+
 from rest_framework.parsers import MultiPartParser, FormParser ,FileUploadParser
 from rest_framework import viewsets
 from rest_framework.viewsets import ViewSet
@@ -101,6 +121,7 @@ class Profile_View(viewsets.ViewSet):
 		return JsonResponse({'response': 'ok', 'image':serializer.data['image'] })
 
 	def post(self , request , id=None):
+		print(request.data['image'])
 		image = request.data['image']
 		user = Account.objects.get(id=id)
 		user.image = image

@@ -129,7 +129,7 @@ class Profile_View(viewsets.ViewSet):
 
 		res={'response' :'ok','data' : data }
 
-		return JsonResponse({'response': 'ok', 'data' : res})
+		return JsonResponse( res)
 
 	def post(self , request , id=None):
 		print(request.data['image'])

@@ -35,9 +35,9 @@ def registration_view(request):
 		account = Account.objects.get(email=serializer.data.get('email'))
 
 		data={'id':account.id}
+		data.update(serializer.data)
 		data['age_in_days'] = account.age_in_days
 		data['age_in_months'] = int(account.age_in_days/30)
-		data.update(serializer.data)
 		res={'response' : 'successfully registered new user',
 				'data' : data }
 
@@ -54,26 +54,17 @@ def sign_in_view(request):
 
 		try:
 			serial_email = serializer.data.get("email")
-			print(111) 
 			serial_pass=serializer.data.get("password")
 			pass_word = Account.objects.get(email=serializer.data.get('email')).password
 			if serial_pass == pass_word:
 					account = Account.objects.get(email=serializer.data.get('email'))
+					user_datail = RegistrationSerializer(account)
 
-					data={
-						'id':account.id,
-						"babyname":account.babyname,
-						"father":account.father,
-						"mother":account.mother,
-						"address":account.address,
-						"birth": account.birth,
-						"pragnancyduration":account.pragnancyduration,
-						"gender":account.gender,
-						"cm_length":account.cm_length,
-						"kg_weight":account.kg_weight,
-						"arrangement_among_siblings":account.arrangement_among_siblings,
-						"email":serializer.data['email']
-						}
+					data={'id':account.id}
+					data.update(user_datail.data)
+					data['age_in_days'] = account.age_in_days
+					data['age_in_months'] = int(account.age_in_days/30)
+
 					res={'response' : 'login successfully',
 						 'data' : data }
 
@@ -83,7 +74,6 @@ def sign_in_view(request):
 					return JsonResponse({'response':'password is not correct'},status=400)
 
 		except Account.DoesNotExist:
-			print(222)
 			return  JsonResponse({'response': 'This user does not exist'})
 	
 # @api_view(['GET'])
@@ -119,12 +109,11 @@ class Profile_View(viewsets.ViewSet):
 		user = Account.objects.get(id=id)
 		image = ProfileSerializer(user )
 		user_datail = RegistrationSerializer(user)
-		print (user_datail.data)
 
 		data={'id':user.id}
+		data.update(user_datail.data)
 		data['age_in_days'] = user.age_in_days
 		data['age_in_months'] = int(user.age_in_days/30)
-		data.update(user_datail.data)
 		data['image'] = image.data['image']
 
 		res={'response' :'ok','data' : data }
@@ -132,7 +121,6 @@ class Profile_View(viewsets.ViewSet):
 		return JsonResponse( res)
 
 	def post(self , request , id=None):
-		print(request.data['image'])
 		image = request.data['image']
 		user = Account.objects.get(id=id)
 		user.image = image

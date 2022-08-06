@@ -30,6 +30,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
             'mother',
             'address',
             'birth',
+            'age_in_days',
             'pragnancyduration',
             'gender',
             'cm_length',

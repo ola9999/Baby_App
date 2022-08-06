@@ -86,24 +86,24 @@ def sign_in_view(request):
 			print(222)
 			return  JsonResponse({'response': 'This user does not exist'})
 	
-@api_view(['GET'])
-def user_detail_view(request,id):
+# @api_view(['GET'])
+# def user_detail_view(request,id):
 
-	if request.method == 'GET':
+# 	if request.method == 'GET':
 
-		account = Account.objects.get(id=id)
-		serializer = RegistrationSerializer(account)
-		print (serializer.data)
+# 		account = Account.objects.get(id=id)
+# 		serializer = RegistrationSerializer(account)
+# 		print (serializer.data)
 
-		data={'id':account.id}
-		data['age_in_days'] = account.age_in_days
-		data['age_in_months'] = int(account.age_in_days/30)
-		data.update(serializer.data)
+# 		data={'id':account.id}
+# 		data['age_in_days'] = account.age_in_days
+# 		data['age_in_months'] = int(account.age_in_days/30)
+# 		data.update(serializer.data)
 
-		res={'response' :'ok','data' : data }
+# 		res={'response' :'ok','data' : data }
 
-
-		return  JsonResponse(res)
+#
+# 		return  JsonResponse(res)
 		
 
 from rest_framework.parsers import MultiPartParser, FormParser ,FileUploadParser
@@ -117,8 +117,19 @@ class Profile_View(viewsets.ViewSet):
 
 	def get(self , request , id= None ):
 		user = Account.objects.get(id=id)
-		serializer = ProfileSerializer(user )
-		return JsonResponse({'response': 'ok', 'image':serializer.data['image'] })
+		image = ProfileSerializer(user )
+		user_datail = RegistrationSerializer(user)
+		print (user_datail.data)
+
+		data={'id':user.id}
+		data['age_in_days'] = user.age_in_days
+		data['age_in_months'] = int(user.age_in_days/30)
+		data.update(user_datail.data)
+		data['image'] = image.data['image']
+
+		res={'response' :'ok','data' : data }
+
+		return JsonResponse( res)
 
 	def post(self , request , id=None):
 		print(request.data['image'])
@@ -128,3 +139,8 @@ class Profile_View(viewsets.ViewSet):
 		user.save()
 		return JsonResponse({'response':'image saved'})
 
+	def profile_pic(self , request , id= None ):
+		user = Account.objects.get(id=id)
+		image = ProfileSerializer(user )
+
+		return JsonResponse({'response': 'ok', 'image' : image.data['image']})

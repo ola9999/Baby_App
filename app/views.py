@@ -18,7 +18,7 @@ def all_views_view(request):#age in monthes
             "get":[
             pre+"admin",  
             pre+"profile/1",
-            pre+'user_detail/1',
+            pre+'profile_pic/1',
             '........................',
             pre+"vaccine/<int:id>",
             pre+"vaccine/1",

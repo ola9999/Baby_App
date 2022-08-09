@@ -53,10 +53,22 @@ def feed_view(request, id ):#age in monthes # changed
     
     if request.method == 'GET': 
 
-        age_related = int((Account.objects.get(id = id).age_in_days)/30) +1
-        food = Feed.objects.all().filter(age_related = age_related )
+        age_related = int((Account.objects.get(id = id).age_in_days)/30) 
         dic={}
         
+        if age_related<3 or age_related%2 == 1  : 
+            food = Feed.objects.all().filter(age_related = age_related )
+
+        elif  age_related>3 and age_related%2 == 0:
+            food = Feed.objects.all().filter(age_related = age_related -1)
+            
+        if age_related>12 and age_related<18 :
+            food = Feed.objects.all().filter(age_related = 12 )
+
+
+        if age_related>18 and age_related<24 :
+            food = Feed.objects.all().filter(age_related = 18 )
+        print(age_related)
         for f in food:
             dic[f.food_type]=[s.food_name for s in food.filter(food_type=f.food_type)]
 

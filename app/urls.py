@@ -20,7 +20,6 @@ urlpatterns = [
     path('feed/<int:id>', feed_view, name='feed'), #age in monthes
     path('sleep/<int:id>', sleep_view, name='sleep'),#age in monthes
     path('tips/<int:id>', tips_view, name='tips'),
-
     path('get_lalluby', lall, name='lalluby'),
 
     path('all', all_views_view, name='all_views_view'),

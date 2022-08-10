@@ -13,25 +13,24 @@ TYPES = (
 	('Vegetables','Vegetables'),
 	('Cyrbohedats','Cyrbohedats'),
 	('Cremy','Cremy'),
-    ('Proteins','Proteins'),
 )
 
 class Feed(models.Model):
-    food_name = models.CharField(max_length=100, null=True , default='default food', verbose_name='food details') 
+    food_name = models.CharField(max_length=300, null=True , default='default food', verbose_name='food details') 
     food_type = models.CharField(max_length=25,choices=TYPES, null=True , default='default type')
     food_icon = models.ImageField(default=None, null=True, blank=True)
 
-    age_related = models.IntegerField(default= 1,verbose_name = "age related (in months)") # age related in months
+    age_related = models.CharField(default= 1,max_length=10,verbose_name = "age related (in months)") # age related in months
 
-def Feed_post_save(sender, instance, created, **kwargs):
-	if created and instance.food_icon != None :
-            image = Image.open(instance.food_icon)
-            image = image.resize((50,50))
-            instance.food_icon = image
-            print(instance.food_icon)
+# def Feed_post_save(sender, instance, created, **kwargs):
+# 	if created and instance.food_icon != None :
+#             image = Image.open(instance.food_icon)
+#             image = image.resize((50,50))
+#             instance.food_icon = image
+#             print(instance.food_icon)
 
 
-post_save.connect(Feed_post_save, sender=Feed)
+# post_save.connect(Feed_post_save, sender=Feed)
 
 class Sleep(models.Model):
     sleep_duration = models.CharField(max_length=8 , default = '15', blank=True , null=True, verbose_name= 'sleep duration (in hours)' ) #sleep_duration in hours

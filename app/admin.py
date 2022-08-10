@@ -5,7 +5,7 @@ class Feed_admin(admin.ModelAdmin):
 
      list_display=( 'food_name',
                     'food_type',
-                    'food_icon',
+                    # 'food_icon',
                     'age_related',)
 
 admin.site.register(Feed,Feed_admin)

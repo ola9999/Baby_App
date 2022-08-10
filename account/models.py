@@ -39,6 +39,8 @@ class Account(models.Model):
 def calc_date(bab,vac):
     return bab.birth + timedelta(days = vac.static_duration*30)
 
+
+
 from vaccine.models import B_V,All_Vaccines
 
 
@@ -57,6 +59,3 @@ def vaccin_post_save(sender, instance, created, **kwargs):
 
 post_save.connect(vaccin_post_save, sender=Account)
 
-class MyImageModel(models.Model):
-      image = models.ImageField(upload_to = 'geo_entity_pic')
-      data=models.CharField(max_length=255, null=True, blank=True)

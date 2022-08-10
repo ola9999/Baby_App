@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'app.apps.AppConfig',
 
     'rest_framework',
-
+    
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
      #   'django_filters',
      'corsheaders',
+    #  'django_extensions',
      'drf_extra_fields'
 
 ]
@@ -151,3 +152,8 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media/images'
+
+GRAPH_MODELS = {
+  'all_applications': True,
+  'group_models': True,
+}

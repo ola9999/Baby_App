@@ -54,11 +54,19 @@ def feed_view(request, id ):#age in monthes # changed
     if request.method == 'GET': 
 
         age_related = int((Account.objects.get(id = id).age_in_days)/30) +1
-        food = Feed.objects.all().filter(age_related = age_related )
         dic={}
-        
+        food = Feed.objects.all().filter(age_related = age_related)
+
         for f in food:
-            dic[f.food_type]=[s.food_name for s in food.filter(food_type=f.food_type)]
+            dic={
+                'Breast milk':[s.food_name for s in food.filter(food_type='Breast milk')],
+                'Formula milk':[s.food_name for s in food.filter(food_type='Formula milk')],
+                'Water':[s.food_name for s in food.filter(food_type='Water')],
+                'Fruits':[s.food_name for s in food.filter(food_type='Fruits')],
+                'Vegetables':[s.food_name for s in food.filter(food_type='Vegetables')],
+                'Cyrbohedats':[s.food_name for s in food.filter(food_type='Cyrbohedats')],
+                'Cremy':[s.food_name for s in food.filter(food_type='Cremy')]
+            }
 
         data=[dic]
         return JsonResponse({'response':'ok',"food":data})

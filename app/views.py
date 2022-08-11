@@ -125,7 +125,7 @@ from rest_framework.views import APIView
 from rest_framework import viewsets
 from app.serializers import *
 from rest_framework.viewsets import ViewSet
-
+import requests
 class Album_View(viewsets.ModelViewSet):
     queryset =  Album.objects.all()
     serializer_class = AlbumSerializer
@@ -146,14 +146,14 @@ class Album_View(viewsets.ModelViewSet):
         user = Account.objects.get(id=id)
         albums = Album(baby =user , image =request.data['image'] )
         albums.save()
-        return JsonResponse({'response': 'image saved'})
+        # response = requests.get('http://127.0.0.1:8000/album/'+str(id))
+        # response = response.json()
+        return JsonResponse({'response': 'image saved'})#, 'images':response['images']})
 
 
 class LallubyViewSet(viewsets.ModelViewSet):
     queryset = Lalluby.objects.all()
     serializer_class = LallubySerializer
-
-import requests
 
 def lall(request):
     #pull data from third party rest api

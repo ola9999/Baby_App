@@ -3,6 +3,12 @@ from datetime import  timedelta,date
 from django.db.models.signals import pre_save, post_save
 
 
+def upload_profile_image_location(instance, filename, **kwargs):
+	file_path = '/'.join(['images', str(instance.id),'profile image', filename]) 
+    
+	return file_path
+
+
 BABY_GENDER = (
     ('Male','Male'),
     ('Female','Female'),
@@ -28,7 +34,7 @@ class Account(models.Model):
 	kg_weight				= models.CharField(max_length=10 , default="default")
 
 	arrangement_among_siblings = models.CharField(max_length=10 , default="default")
-	image 					= models.FileField(default=None, null=True, blank=True)
+	image 					= models.FileField(default=None, null=True, blank=True, upload_to=upload_profile_image_location)
 	# profile_image 			= models.ImageField(max_Length= 255 , upload_to= get_profile_image_filepath , null = True ,blank= True, default =get_default_profile_image )
 	def save(self, *args, **kwargs):
 		self.age_in_days = (date.today() - self.birth).days 

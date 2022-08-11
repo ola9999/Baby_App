@@ -31,6 +31,12 @@ class Feed(models.Model):
 
 
 # post_save.connect(Feed_post_save, sender=Feed)
+def upload_album_location(instance, filename, **kwargs):
+	file_path = '/'.join(['images', str(instance.baby.id),'album', filename]) 
+    
+	return file_path
+
+
 
 class Sleep(models.Model):
     sleep_duration = models.CharField(max_length=8 , default = '15', blank=True , null=True, verbose_name= 'sleep duration (in hours)' ) #sleep_duration in hours
@@ -68,5 +74,5 @@ class Tips(models.Model):
 
 class Album(models.Model):
     baby                = models.ForeignKey(Account, on_delete=models.CASCADE, null=True , blank=True) 
-    image = models.FileField(default=None, null=True, blank=True)
+    image = models.FileField(default=None, null=True, blank=True,upload_to=upload_album_location)
 

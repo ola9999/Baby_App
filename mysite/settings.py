@@ -151,7 +151,7 @@ STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media/images'
+MEDIA_ROOT = BASE_DIR / 'media/'
 
 GRAPH_MODELS = {
   'all_applications': True,
